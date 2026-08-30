@@ -1,0 +1,150 @@
+{
+  "id": "lookup-balance-legacy",
+  "version": 1,
+  "status": "draft",
+  "goal": "Search for member M1002 and report their primary balance. Use action.extract (with action.type='observe') to capture it as an output field named memberBalance (type number).",
+  "target": {
+    "surface": "vision",
+    "baseUrl": "http://localhost:4173/legacy"
+  },
+  "createdAt": "2026-08-30T15:53:42.100Z",
+  "discoveredBy": {
+    "model": "claude-sonnet-5",
+    "discoveryRunId": "discovery-1788105187698"
+  },
+  "inputParams": [
+    {
+      "name": "memberId",
+      "type": "string",
+      "description": "Value supplied for: Member ID or Name input field",
+      "required": true
+    }
+  ],
+  "outputs": [
+    {
+      "name": "memberBalance",
+      "type": "number",
+      "description": "The primary balance of the member shown on Member Detail page",
+      "required": false
+    }
+  ],
+  "steps": [
+    {
+      "id": "step-0",
+      "description": "Navigate to http://localhost:4173/legacy/",
+      "action": {
+        "type": "navigate",
+        "value": "http://localhost:4173/legacy/"
+      },
+      "risk": "safe",
+      "riskRationale": "Navigation alone has no side effects.",
+      "checkpoint": null,
+      "recoverable": [],
+      "extract": []
+    },
+    {
+      "id": "step-1",
+      "description": "fill on Member ID or Name input field",
+      "action": {
+        "type": "fill",
+        "locator": {
+          "description": "Member ID or Name input field",
+          "strategies": [
+            {
+              "kind": "visionDescription",
+              "description": "Member ID or Name input field"
+            }
+          ],
+          "rationale": "VisionSurface targets by screenshot grounding only; there is no DOM to fall back to."
+        },
+        "value": "{{memberId}}"
+      },
+      "risk": "safe",
+      "riskRationale": "Filling a search field has no side effects.",
+      "checkpoint": null,
+      "recoverable": [],
+      "extract": []
+    },
+    {
+      "id": "step-2",
+      "description": "click on Go button next to Member ID input",
+      "action": {
+        "type": "click",
+        "locator": {
+          "description": "Go button next to Member ID input",
+          "strategies": [
+            {
+              "kind": "visionDescription",
+              "description": "Go button next to Member ID input"
+            }
+          ],
+          "rationale": "VisionSurface targets by screenshot grounding only; there is no DOM to fall back to."
+        }
+      },
+      "risk": "safe",
+      "riskRationale": "Searching/submitting a lookup form is a read-only action with no side effects.",
+      "checkpoint": {
+        "kind": "textNotVisible",
+        "value": "Member Lookup",
+        "description": "Page navigates away from the lookup form to show member details"
+      },
+      "recoverable": [],
+      "extract": []
+    },
+    {
+      "id": "step-4",
+      "description": "click on Open button in results row for member M1002",
+      "action": {
+        "type": "click",
+        "locator": {
+          "description": "Open button in results row for member {{memberId}}",
+          "strategies": [
+            {
+              "kind": "visionDescription",
+              "description": "Open button in results row for member {{memberId}}"
+            }
+          ],
+          "rationale": "VisionSurface targets by screenshot grounding only; there is no DOM to fall back to."
+        }
+      },
+      "risk": "safe",
+      "riskRationale": "Opening a member record for viewing is a read-only navigation action.",
+      "checkpoint": {
+        "kind": "textVisible",
+        "value": "{{memberId}}",
+        "description": "Member detail page loads showing the member ID"
+      },
+      "recoverable": [],
+      "extract": []
+    },
+    {
+      "id": "step-5",
+      "description": "observe",
+      "action": {
+        "type": "observe"
+      },
+      "risk": "safe",
+      "riskRationale": "Just reading page content, no interaction.",
+      "checkpoint": null,
+      "recoverable": [],
+      "extract": [
+        {
+          "outputField": "memberBalance",
+          "pattern": "Balance:\\s*\\$([0-9,.]+)",
+          "transform": "number"
+        }
+      ]
+    }
+  ],
+  "overallCheckpoint": {
+    "kind": "textVisible",
+    "value": "Member Detail",
+    "description": "Successfully searched for member M1002 and extracted their primary balance of $128.90 as memberBalance."
+  },
+  "businessOutcomes": [],
+  "escalationTriggers": [],
+  "riskSummary": {
+    "hasRiskySteps": false,
+    "justification": "No risky steps."
+  }
+}
