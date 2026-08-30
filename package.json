@@ -1,0 +1,30 @@
+{
+  "name": "interfaceai-computer-use-takehome",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Discovery-to-deterministic-replay computer-use automation for a credit union back-office flow.",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "dev:app": "tsx src/target-app/server.ts",
+    "discover": "tsx src/cli/discover.ts",
+    "replay": "tsx src/cli/replay.ts",
+    "approve": "tsx src/cli/approve.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.32.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "playwright": "^1.48.2",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.16.11",
+    "tsx": "^4.19.1",
+    "typescript": "^5.6.3",
+    "vitest": "^4.1.11"
+  }
+}
